@@ -136,7 +136,7 @@ VerifyButton.MouseButton1Click:Connect(function()
 		task.wait(0.3)
 		Blur:Destroy()
 		HackerHubUI:Destroy()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/TungfVN/Hacker-Hub/refs/heads/main/Hacker%20Hub%20Main"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/TungfVN/Hacker-Hub/refs/heads/main/Hacker%20Hub%20Menu"))()
 	else
 		Notification.Text = "❌ Key Invalid"
 	end
