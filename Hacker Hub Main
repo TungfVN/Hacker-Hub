@@ -1,0 +1,469 @@
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+
+local Window = WindUI:CreateWindow({
+    Title = "Hacker Hub",
+    Icon = "door-open",
+    Author = "Edit By TungfVN",
+    Folder = "CloudHub",
+    Size = UDim2.fromOffset(580, 460),
+    Transparent = true,
+    Theme = "Dark",
+    Resizable = true,
+    SideBarWidth = 200,
+    Background = "", -- rbxassetid only
+    BackgroundImageTransparency = 0.42,
+    HideSearchBar = false,
+    ScrollBarEnabled = true,
+    User = {
+        Enabled = true,
+        Anonymous = false,
+        Callback = function()
+            print("clicked")
+        end,
+    },
+})
+
+-- 🔹 Tạo Section chính
+local Section = Window:Section({
+    Title = "Blox Fruits",
+    Icon = "apple",
+    Opened = true,
+})
+
+-- 🟢 Tab chính: Key🟢
+local KeyGreenTab = Section:Tab({
+    Title = "▪️Key🟢",
+    Icon = "lock-keyhole",
+    Locked = false,
+})
+
+-- ⚙️ Các “tab con” được mô phỏng bằng nội dung bên trong Tab Key🟢
+KeyGreenTab:Button({
+    Title = "Native Hub",
+    Desc = "Click to load Native Hub",
+    Locked = false,
+    Callback = function()
+        (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()                                                                                                     
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Alchemy Hub",
+    Desc = "Click to load Alchemy Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Ronix Hub",
+    Desc = "Click to load Ronix Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/7d8a2a1a9a562a403b52532e58a14065.lua"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Hoho Hub",
+    Desc = "Click to load Hoho Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Nat Hub",
+    Desc = "Click to load Nat Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ArdyBotzz/NatHub/refs/heads/master/NatHub.lua"))();
+        print("clicked")
+    end
+})
+
+local KeyRedTab = Section:Tab({
+    Title = "▪️Key🔴",
+    Icon = "lock-keyhole-open",
+    Locked = false,
+})
+
+KeyRedTab:Button({
+    Title = "Redz Hub",
+    Desc = "Click to load Redz Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "BlueX Hub",
+    Desc = "Click to load BlueX Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/refs/heads/main/Main.lua"))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "Matsune Hub",
+    Desc = "Click to load Matsune Hub",
+    Locked = false,
+    Callback = function()
+        getgenv().Team = "Pirates"
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/RealMatsune/Rolls-Rocye/refs/heads/main/Loading.lua"))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "Tsuo Hub",
+    Desc = "Click to load Tsuo Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/Tsuoscripts"))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "W Azure Hub",
+    Desc = "Click to load W Azure Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc6104dabe8e19562e5cc2.lua"))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "Speed Hub X",
+    Desc = "Click to load Speed Hub X",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+        print("clicked")
+    end
+})
+
+local Section = Window:Section({
+    Title = "Grow A Garden",
+    Icon = "sprout",
+    Opened = true,
+})
+
+local KeyGreenTab = Section:Tab({
+    Title = "▪️Key🟢",
+    Icon = "lock-keyhole",
+    Locked = false,
+})
+
+-- ⚙️ Các “tab con” được mô phỏng bằng nội dung bên trong Tab Key🟢
+KeyGreenTab:Button({
+    Title = "Alchemy Hub",
+    Desc = "Click to load Alchemy Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Ronix Hub",
+    Desc = "Click to load Ronix Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/7d8a2a1a9a562a403b52532e58a14065.lua"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Native Hub",
+    Desc = "Click to load Native Hub",
+    Locked = false,
+    Callback = function()
+        (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()                                                                                                     
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Nat Hub",
+    Desc = "Click to load Nat Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ArdyBotzz/NatHub/refs/heads/master/NatHub.lua"))();
+        print("clicked")
+    end
+})
+
+local KeyRedTab = Section:Tab({
+    Title = "▪️Key🔴",
+    Icon = "lock-keyhole-open",
+    Locked = false,
+})
+
+KeyRedTab:Button({
+    Title = "ThunderZ Hub",
+    Desc = "Click to load ThunderZ Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/ThundarZ/Welcome/refs/heads/main/Main/GaG/Main.lua'))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "No Lag Hub",
+    Desc = "Click to load No Lag Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/NoLag-id/No-Lag-HUB/refs/heads/main/Loader/LoaderV1.lua"))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "Speed Hub X",
+    Desc = "Click to load Speed Hub X",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+        print("clicked")
+    end
+})
+
+local Section = Window:Section({
+    Title = "99 Nights In The Forest",
+    Icon = "axe",
+    Opened = true,
+})
+
+local KeyGreenTab = Section:Tab({
+    Title = "▪️Key🟢",
+    Icon = "lock-keyhole",
+    Locked = false,
+})
+
+KeyGreenTab:Button({
+    Title = "Alchemy Hub",
+    Desc = "Click to load Alchemy Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Hoho Hub",
+    Desc = "Click to load Hoho Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Kiki Hub",
+    Desc = "Click to load Kiki Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/KiKi-Ware/Roblox/refs/heads/main/Key"))()
+        print("clicked")
+    end
+})
+
+local KeyRedTab = Section:Tab({
+    Title = "▪️Key🔴",
+    Icon = "lock-keyhole-open",
+    Locked = false,
+})
+
+KeyRedTab:Button({
+    Title = "Ringta Hub",
+    Desc = "Click to load Ringta Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/wefwef127382/99daysloader.github.io/refs/heads/main/ringta.lua"))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "H4xScripts",
+    Desc = "Click to load H4xScripts",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/H4xScripts/Loader/refs/heads/main/loader.lua", true))()
+        print("clicked")
+    end
+})
+
+local Section = Window:Section({
+    Title = "Steal A Brainrot",
+    Icon = "toilet",
+    Opened = true,
+})
+
+local KeyGreenTab = Section:Tab({
+    Title = "▪️Key🟢",
+    Icon = "lock-keyhole",
+    Locked = false,
+})
+
+KeyGreenTab:Button({
+    Title = "Ronix Hub",
+    Desc = "Click to load Ronix Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/7d8a2a1a9a562a403b52532e58a14065.lua"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Hoho Hub",
+    Desc = "Click to load Hoho Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Neox Hub",
+    Desc = "Click to load Neox Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/hassanxzayn-lua/NEOXHUBMAIN/refs/heads/main/StealABrainrot"))()
+        print("clicked")
+    end
+})
+
+local KeyRedTab = Section:Tab({
+    Title = "▪️Key🔴",
+    Icon = "lock-keyhole-open",
+    Locked = false,
+})
+
+KeyRedTab:Button({
+    Title = "Speed Hub X",
+    Desc = "Click to load Speed Hub X",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "Lurk Hack",
+    Desc = "Click to load Lurk Hack",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/egor2078f/lurkhackv4/refs/heads/main/main.lua', true))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "Arbix Hub",
+    Desc = "Click to load Arbix Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/zenizmilen/script-steal-a-brainrot/refs/heads/main/follow-for-auto-steal-work"))()
+        print("clicked")
+    end
+})
+
+local Section = Window:Section({
+    Title = "Dead Rails",
+    Icon = "train-track",
+    Opened = true,
+})
+
+local KeyGreenTab = Section:Tab({
+    Title = "▪️Key🟢",
+    Icon = "lock-keyhole",
+    Locked = false,
+})
+
+KeyGreenTab:Button({
+    Title = "Hoho Hub",
+    Desc = "Click to load Hoho Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Alchemy Hub",
+    Desc = "Click to load Alchemy Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Nat Hub",
+    Desc = "Click to load Nat Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ArdyBotzz/NatHub/refs/heads/master/NatHub.lua"))();
+        print("clicked")
+    end
+})
+
+KeyGreenTab:Button({
+    Title = "Native Hub",
+    Desc = "Click to load Native Hub",
+    Locked = false,
+    Callback = function()
+        (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()
+        print("clicked")
+    end
+})
+
+local KeyRedTab = Section:Tab({
+    Title = "▪️Key🔴",
+    Icon = "lock-keyhole-open",
+    Locked = false,
+})
+
+KeyRedTab:Button({
+    Title = "Speed Hub X",
+    Desc = "Click to load Speed Hub X",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+        print("clicked")
+    end
+})
+
+KeyRedTab:Button({
+    Title = "Null Fire Hub",
+    Desc = "Click to load Null Fire Hub",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"))()
+        print("clicked")
+    end
+})
