@@ -1,0 +1,12 @@
+getgenv().settings = {
+    Script_Title = "Script Name", -- Title shown in the UI
+    KeyExpiration = 24,            -- Key expiration time in hours
+    InviteCode = "GhcXWRkc"
+}
+
+local AuthGuard = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuthGuard0/library/refs/heads/main/v1_ui.lua"))()
+	"PRIVATE_KEY",
+	{
+		serviceId = "SERVICE_ID",
+	}
+loadstring(game:HttpGet("https://cdn.authguard.org/virtual-file/9d75664879de41ba9feaa4f99f179809"))()
