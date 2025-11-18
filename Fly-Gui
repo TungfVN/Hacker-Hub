@@ -1,1 +1,785 @@
+-- Fly GUI with Larger Buttons - WITH PROPER X ANIMATION
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Create ScreenGui
+local flyGui = Instance.new("ScreenGui")
+flyGui.Name = "FlyGUI"
+flyGui.Parent = playerGui
+
+-- Logo/Toggle button (Larger)
+local toggleButton = Instance.new("ImageButton")
+toggleButton.Name = "ToggleButton"
+toggleButton.Size = UDim2.new(0, 90, 0, 90)
+toggleButton.Position = UDim2.new(0, 20, 0, 20)
+toggleButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+toggleButton.BackgroundTransparency = 0.2
+toggleButton.Image = "rbxassetid://86019416633420"
+toggleButton.ImageColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.ScaleType = Enum.ScaleType.Fit
+toggleButton.ZIndex = 10
+toggleButton.Parent = flyGui
+
+local toggleCorner = Instance.new("UICorner")
+toggleCorner.CornerRadius = UDim.new(0, 14)
+toggleCorner.Parent = toggleButton
+
+local toggleStroke = Instance.new("UIStroke")
+toggleStroke.Color = Color3.fromRGB(80, 80, 80)
+toggleStroke.Thickness = 2
+toggleStroke.Parent = toggleButton
+
+-- Create Vertical Column (Wider)
+local columnFrame = Instance.new("Frame")
+columnFrame.Name = "ColumnFrame"
+columnFrame.Size = UDim2.new(0, 100, 0, 0)
+columnFrame.Position = UDim2.new(0, 15, 0, 120)
+columnFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+columnFrame.BackgroundTransparency = 0.3
+columnFrame.BorderSizePixel = 0
+columnFrame.ClipsDescendants = true
+columnFrame.Visible = false
+columnFrame.Parent = flyGui
+
+local columnCorner = Instance.new("UICorner")
+columnCorner.CornerRadius = UDim.new(0, 14)
+columnCorner.Parent = columnFrame
+
+local columnStroke = Instance.new("UIStroke")
+columnStroke.Color = Color3.fromRGB(60, 60, 60)
+columnStroke.Thickness = 2
+columnStroke.Parent = columnFrame
+
+-- Speed Increase Button (Top - Larger)
+local increaseButton = Instance.new("TextButton")
+increaseButton.Name = "IncreaseButton"
+increaseButton.Size = UDim2.new(1, -16, 0, 65)
+increaseButton.Position = UDim2.new(0, 8, 0, 8)
+increaseButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+increaseButton.BackgroundTransparency = 0.3
+increaseButton.Text = "➕"
+increaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+increaseButton.TextSize = 28
+increaseButton.Font = Enum.Font.GothamBold
+increaseButton.Parent = columnFrame
+
+local incCorner = Instance.new("UICorner")
+incCorner.CornerRadius = UDim.new(0, 10)
+incCorner.Parent = increaseButton
+
+local incStroke = Instance.new("UIStroke")
+incStroke.Color = Color3.fromRGB(80, 80, 80)
+incStroke.Thickness = 1
+incStroke.Parent = increaseButton
+
+-- Speed Display (Middle - Larger)
+local speedDisplay = Instance.new("TextLabel")
+speedDisplay.Name = "SpeedDisplay"
+speedDisplay.Size = UDim2.new(1, -16, 0, 65)
+speedDisplay.Position = UDim2.new(0, 8, 0, 80)
+speedDisplay.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+speedDisplay.BackgroundTransparency = 0.4
+speedDisplay.Text = "50"
+speedDisplay.TextColor3 = Color3.fromRGB(220, 220, 220)
+speedDisplay.TextSize = 22
+speedDisplay.Font = Enum.Font.GothamBold
+speedDisplay.Parent = columnFrame
+
+local speedCorner = Instance.new("UICorner")
+speedCorner.CornerRadius = UDim.new(0, 10)
+speedCorner.Parent = speedDisplay
+
+local speedStroke = Instance.new("UIStroke")
+speedStroke.Color = Color3.fromRGB(70, 70, 70)
+speedStroke.Thickness = 1
+speedStroke.Parent = speedDisplay
+
+-- Speed Decrease Button (Larger)
+local decreaseButton = Instance.new("TextButton")
+decreaseButton.Name = "DecreaseButton"
+decreaseButton.Size = UDim2.new(1, -16, 0, 65)
+decreaseButton.Position = UDim2.new(0, 8, 0, 152)
+decreaseButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+decreaseButton.BackgroundTransparency = 0.3
+decreaseButton.Text = "➖"
+decreaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+decreaseButton.TextSize = 28
+decreaseButton.Font = Enum.Font.GothamBold
+decreaseButton.Parent = columnFrame
+
+local decCorner = Instance.new("UICorner")
+decCorner.CornerRadius = UDim.new(0, 10)
+decCorner.Parent = decreaseButton
+
+local decStroke = Instance.new("UIStroke")
+decStroke.Color = Color3.fromRGB(80, 80, 80)
+decStroke.Thickness = 1
+decStroke.Parent = decreaseButton
+
+-- Start/Stop Button (Larger)
+local startStopButton = Instance.new("TextButton")
+startStopButton.Name = "StartStopButton"
+startStopButton.Size = UDim2.new(1, -16, 0, 65)
+startStopButton.Position = UDim2.new(0, 8, 0, 224)
+startStopButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+startStopButton.BackgroundTransparency = 0.3
+startStopButton.Text = "🔴"
+startStopButton.TextColor3 = Color3.fromRGB(220, 220, 220)
+startStopButton.TextSize = 24
+startStopButton.Font = Enum.Font.GothamBold
+startStopButton.Parent = columnFrame
+
+local startStopCorner = Instance.new("UICorner")
+startStopCorner.CornerRadius = UDim.new(0, 10)
+startStopCorner.Parent = startStopButton
+
+local startStopStroke = Instance.new("UIStroke")
+startStopStroke.Color = Color3.fromRGB(70, 70, 70)
+startStopStroke.Thickness = 1
+startStopStroke.Parent = startStopButton
+
+-- Close Button (Bottom - Fixed with proper X)
+local closeButton = Instance.new("TextButton")
+closeButton.Name = "CloseButton"
+closeButton.Size = UDim2.new(1, -16, 0, 50)
+closeButton.Position = UDim2.new(0, 8, 0, 296)
+closeButton.BackgroundColor3 = Color3.fromRGB(150, 30, 30)
+closeButton.BackgroundTransparency = 0.3
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.TextSize = 24  -- Increased text size for better visibility
+closeButton.Font = Enum.Font.GothamBlack  -- Changed to bolder font
+closeButton.Parent = columnFrame
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 10)
+closeCorner.Parent = closeButton
+
+local closeStroke = Instance.new("UIStroke")
+closeStroke.Color = Color3.fromRGB(200, 60, 60)
+closeStroke.Thickness = 1
+closeStroke.Parent = closeButton
+
+-- Control variables
+local isFlying = false
+local flySpeed = 50
+local bodyVelocity
+local bodyGyro
+local isColumnOpen = false
+local isAnimating = false
+local isClosing = false
+local moveConnection
+local originalSeatCFrame
+
+-- Update speed display
+local function updateSpeedDisplay()
+    speedDisplay.Text = tostring(flySpeed)
+end
+
+-- Safe character check function
+local function getCharacter()
+    local character = player.Character
+    if character and character:IsDescendantOf(workspace) then
+        return character
+    end
+    return nil
+end
+
+-- Enhanced seat detection function
+local function getSeat()
+    local character = getCharacter()
+    if not character then return nil end
+    
+    local humanoid = character:FindFirstChild("Humanoid")
+    if not humanoid then return nil end
+    
+    if humanoid.Sit then
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") then
+                local seat = part:FindFirstAncestorOfClass("VehicleSeat")
+                if seat then
+                    return seat
+                end
+            end
+        end
+        
+        for _, seat in pairs(workspace:GetDescendants()) do
+            if seat:IsA("Seat") and seat.Occupant == humanoid then
+                return seat
+            end
+        end
+        
+        local runtimeItems = workspace:FindFirstChild("RuntimeItems")
+        if runtimeItems then
+            for _, chair in pairs(runtimeItems:GetChildren()) do
+                if chair:IsA("Model") and (chair.Name == "Chair" or chair.Name:find("Chair")) then
+                    local seat = chair:FindFirstChildOfClass("Seat")
+                    if seat and seat.Occupant == humanoid then
+                        return seat
+                    end
+                end
+            end
+        end
+    end
+    
+    return nil
+end
+
+-- Get the actual part to apply forces to (seat or character root part)
+local function getFlyTarget()
+    local seat = getSeat()
+    if seat then
+        if seat:IsA("Model") then
+            return seat.PrimaryPart or seat:FindFirstChildWhichIsA("BasePart") or seat
+        else
+            return seat
+        end
+    else
+        local character = getCharacter()
+        if character then
+            return character:FindFirstChild("HumanoidRootPart")
+        end
+    end
+    return nil
+end
+
+-- Simple click animation function
+local function createClickAnimation(button)
+    button.MouseButton1Down:Connect(function()
+        if isClosing then return end
+        local tween = TweenService:Create(button, TweenInfo.new(0.1), {
+            Size = UDim2.new(1, -20, 0, button == closeButton and 45 or 60)
+        })
+        tween:Play()
+    end)
+    
+    button.MouseButton1Up:Connect(function()
+        if isClosing then return end
+        local originalSize = UDim2.new(1, -16, 0, button == closeButton and 50 or 65)
+        local tween = TweenService:Create(button, TweenInfo.new(0.1), {
+            Size = originalSize
+        })
+        tween:Play()
+    end)
+end
+
+-- Open column animation
+local function openColumn()
+    if isAnimating or isColumnOpen or isClosing then return end
+    
+    isAnimating = true
+    columnFrame.Visible = true
+    
+    local tween = TweenService:Create(columnFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Size = UDim2.new(0, 100, 0, 354)
+    })
+    
+    local toggleTween = TweenService:Create(toggleButton, TweenInfo.new(0.4), {
+        Rotation = 180
+    })
+    
+    tween:Play()
+    toggleTween:Play()
+    
+    tween.Completed:Connect(function()
+        isColumnOpen = true
+        isAnimating = false
+    end)
+end
+
+-- Close column animation
+local function closeColumn()
+    if isAnimating or not isColumnOpen or isClosing then return end
+    
+    isAnimating = true
+    
+    local tween = TweenService:Create(columnFrame, TweenInfo.new(0.4), {
+        Size = UDim2.new(0, 100, 0, 0)
+    })
+    
+    local toggleTween = TweenService:Create(toggleButton, TweenInfo.new(0.3), {
+        Rotation = 0
+    })
+    
+    tween:Play()
+    toggleTween:Play()
+    
+    tween.Completed:Connect(function()
+        columnFrame.Visible = false
+        isColumnOpen = false
+        isAnimating = false
+    end)
+end
+
+-- Toggle column function
+local function toggleColumn()
+    if isAnimating or isClosing then return end
+    
+    if isColumnOpen then
+        closeColumn()
+    else
+        openColumn()
+    end
+end
+
+-- SMOOTH CLOSE UI ANIMATION FUNCTION (IMPROVED)
+local function closeUIAnimation()
+    if isClosing then return end
+    
+    isClosing = true
+    
+    -- Disable all buttons during animation
+    toggleButton.Active = false
+    increaseButton.Active = false
+    decreaseButton.Active = false
+    startStopButton.Active = false
+    closeButton.Active = false
+    
+    -- First close the column if it's open with smooth animation
+    if isColumnOpen then
+        local closeColumnTween = TweenService:Create(columnFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, 100, 0, 0),
+            BackgroundTransparency = 0.8
+        })
+        
+        local toggleRotateTween = TweenService:Create(toggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Rotation = 0
+        })
+        
+        closeColumnTween:Play()
+        toggleRotateTween:Play()
+        
+        -- Wait for column to close completely
+        closeColumnTween.Completed:Wait()
+    end
+    
+    -- Simultaneous fade out and scale down animation for both buttons
+    local toggleFadeTween = TweenService:Create(toggleButton, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        BackgroundTransparency = 1,
+        ImageTransparency = 1,
+        Size = UDim2.new(0, 0, 0, 0),
+        Position = UDim2.new(0, 45, 0, 45) -- Center of original position
+    })
+    
+    local closeFadeTween = TweenService:Create(closeButton, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        BackgroundTransparency = 1,
+        TextTransparency = 1,
+        TextColor3 = Color3.fromRGB(255, 100, 100) -- Red fade effect
+    })
+    
+    -- Create a special X animation on the close button before fading
+    local closeScaleTween = TweenService:Create(closeButton, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        TextSize = 32, -- Make X bigger
+        Size = UDim2.new(1, -8, 0, 60) -- Make close button bigger temporarily
+    })
+    
+    local closeScaleBackTween = TweenService:Create(closeButton, TweenInfo.new(0.3, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {
+        TextSize = 24,
+        Size = UDim2.new(1, -16, 0, 50)
+    })
+    
+    -- Animation sequence
+    closeScaleTween:Play()
+    closeScaleTween.Completed:Wait()
+    closeScaleBackTween:Play()
+    
+    -- Start fade animations after the X animation
+    toggleFadeTween:Play()
+    closeFadeTween:Play()
+    
+    -- Wait for fade animation to complete
+    toggleFadeTween.Completed:Wait()
+    
+    -- Stop flying if active
+    if isFlying then
+        stopFlying()
+    end
+    
+    -- Destroy UI after animation
+    flyGui:Destroy()
+end
+
+-- FLY FUNCTION
+local function startFlying()
+    if isFlying or isClosing then return end
+    
+    local character = getCharacter()
+    if not character then return end
+    
+    local humanoid = character:FindFirstChild("Humanoid")
+    local targetPart = getFlyTarget()
+    
+    if not humanoid or not targetPart then return end
+    
+    isFlying = true
+    startStopButton.Text = "🟢"
+    startStopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    startStopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    
+    -- Store original seat position if sitting
+    local seat = getSeat()
+    if seat then
+        originalSeatCFrame = seat.CFrame
+    else
+        originalSeatCFrame = nil
+    end
+    
+    -- Clean up any existing instances
+    if bodyVelocity then
+        bodyVelocity:Destroy()
+        bodyVelocity = nil
+    end
+    if bodyGyro then
+        bodyGyro:Destroy()
+        bodyGyro = nil
+    end
+    
+    -- Create BodyVelocity for movement
+    bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+    bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
+    bodyVelocity.Parent = targetPart
+    
+    -- Create BodyGyro for stability
+    bodyGyro = Instance.new("BodyGyro")
+    bodyGyro.MaxTorque = Vector3.new(100000, 100000, 100000)
+    bodyGyro.P = 10000
+    bodyGyro.D = 1000
+    bodyGyro.Parent = targetPart
+    
+    -- Disable seat auto-rotation and store original properties
+    if seat then
+        if seat:IsA("VehicleSeat") then
+            seat.MaxSpeed = 0
+        end
+        
+        -- Make seat non-anchored so it can move freely
+        if seat:IsA("BasePart") then
+            seat.Anchored = false
+        elseif seat:IsA("Model") and seat.PrimaryPart then
+            seat.PrimaryPart.Anchored = false
+        end
+    else
+        humanoid.PlatformStand = true
+    end
+    
+    -- Make sure the target part can move
+    if targetPart:IsA("BasePart") then
+        targetPart.CanCollide = false
+        targetPart.Massless = true
+    end
+    
+    -- Movement connection
+    moveConnection = RunService.Heartbeat:Connect(function()
+        if not isFlying or not bodyVelocity or not bodyGyro or isClosing then
+            if moveConnection then
+                moveConnection:Disconnect()
+            end
+            return
+        end
+        
+        local currentCharacter = getCharacter()
+        if not currentCharacter then
+            if moveConnection then
+                moveConnection:Disconnect()
+            end
+            return
+        end
+        
+        local currentHumanoid = currentCharacter:FindFirstChild("Humanoid")
+        if not currentHumanoid then
+            if moveConnection then
+                moveConnection:Disconnect()
+            end
+            return
+        end
+        
+        local currentTarget = getFlyTarget()
+        if not currentTarget then
+            if moveConnection then
+                moveConnection:Disconnect()
+            end
+            return
+        end
+        
+        -- Check if we just jumped out of seat
+        local currentSeat = getSeat()
+        if not currentSeat and seat then
+            -- We just jumped out of seat, switch to character control
+            seat = nil
+            originalSeatCFrame = nil
+            
+            -- Move controls to character
+            if bodyVelocity.Parent ~= currentTarget then
+                bodyVelocity.Parent = currentTarget
+            end
+            if bodyGyro.Parent ~= currentTarget then
+                bodyGyro.Parent = currentTarget
+            end
+            
+            currentHumanoid.PlatformStand = true
+        end
+        
+        if bodyVelocity.Parent ~= currentTarget then
+            bodyVelocity.Parent = currentTarget
+        end
+        if bodyGyro.Parent ~= currentTarget then
+            bodyGyro.Parent = currentTarget
+        end
+        
+        local isSitting = getSeat() ~= nil
+        if isSitting then
+            currentHumanoid.PlatformStand = false
+        else
+            currentHumanoid.PlatformStand = true
+        end
+        
+        local direction = Vector3.new(0, 0, 0)
+        local camera = workspace.CurrentCamera
+        
+        if camera then
+            local cameraCFrame = camera.CFrame
+            local lookVector = cameraCFrame.LookVector
+            local rightVector = cameraCFrame.RightVector
+            
+            if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+                direction = direction + lookVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+                direction = direction - lookVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+                direction = direction - rightVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+                direction = direction + rightVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+                direction = direction + Vector3.new(0, 1, 0)
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+                direction = direction + Vector3.new(0, -1, 0)
+            end
+            
+            if not isSitting or direction.Magnitude > 0.1 then
+                if direction.Magnitude > 0.1 then
+                    bodyGyro.CFrame = CFrame.new(currentTarget.Position, currentTarget.Position + direction)
+                else
+                    bodyGyro.CFrame = CFrame.new(currentTarget.Position, currentTarget.Position + lookVector)
+                end
+            end
+        end
+        
+        if direction.Magnitude > 0 then
+            bodyVelocity.Velocity = direction.Unit * flySpeed
+        else
+            bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+        end
+    end)
+end
+
+-- STOP FLYING FUNCTION
+local function stopFlying()
+    if not isFlying then return end
+    
+    isFlying = false
+    startStopButton.Text = "🔴"
+    startStopButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    startStopButton.TextColor3 = Color3.fromRGB(220, 220, 220)
+    
+    if moveConnection then
+        moveConnection:Disconnect()
+        moveConnection = nil
+    end
+    
+    local character = getCharacter()
+    if not character then return end
+    
+    local humanoid = character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.PlatformStand = false
+    end
+    
+    -- Prevent seat teleportation
+    local seat = getSeat()
+    if seat then
+        if seat:IsA("VehicleSeat") then
+            seat.MaxSpeed = 100
+        end
+    else
+        originalSeatCFrame = nil
+    end
+    
+    -- Apply momentum for natural falling
+    local targetPart = getFlyTarget()
+    if targetPart and targetPart:IsA("BasePart") then
+        if bodyVelocity then
+            local currentVelocity = bodyVelocity.Velocity
+            
+            -- Apply momentum for smooth transition
+            local momentumVelocity = Instance.new("BodyVelocity")
+            momentumVelocity.Velocity = Vector3.new(
+                currentVelocity.X * 0.5,
+                currentVelocity.Y * 0.3,
+                currentVelocity.Z * 0.5
+            )
+            momentumVelocity.MaxForce = Vector3.new(8000, 8000, 8000)
+            momentumVelocity.Parent = targetPart
+            
+            -- Gradually reduce momentum
+            local momentumTween = TweenService:Create(momentumVelocity, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                Velocity = Vector3.new(0, momentumVelocity.Velocity.Y * 0.2, 0)
+            })
+            momentumTween:Play()
+            
+            momentumTween.Completed:Connect(function()
+                momentumVelocity:Destroy()
+            end)
+        end
+        
+        -- Restore properties with delay
+        delay(1, function()
+            if targetPart and targetPart.Parent then
+                targetPart.CanCollide = true
+                targetPart.Massless = false
+            end
+        end)
+    end
+    
+    -- Clean up flying controls
+    if bodyVelocity then
+        bodyVelocity:Destroy()
+        bodyVelocity = nil
+    end
+    
+    if bodyGyro then
+        bodyGyro:Destroy()
+        bodyGyro = nil
+    end
+    
+    -- Clear stored seat data
+    originalSeatCFrame = nil
+end
+
+-- Connect button events
+decreaseButton.MouseButton1Click:Connect(function()
+    if isClosing then return end
+    flySpeed = math.max(10, flySpeed - 10)
+    updateSpeedDisplay()
+end)
+
+increaseButton.MouseButton1Click:Connect(function()
+    if isClosing then return end
+    flySpeed = math.min(200, flySpeed + 10)
+    updateSpeedDisplay()
+end)
+
+startStopButton.MouseButton1Click:Connect(function()
+    if isClosing then return end
+    if isFlying then
+        stopFlying()
+    else
+        startFlying()
+    end
+end)
+
+-- Close button event with improved animation
+closeButton.MouseButton1Click:Connect(function()
+    if isClosing then return end
+    closeUIAnimation()
+end)
+
+-- Toggle button click
+toggleButton.MouseButton1Click:Connect(function()
+    if isClosing then return end
+    toggleColumn()
+end)
+
+-- Apply click animations
+createClickAnimation(increaseButton)
+createClickAnimation(decreaseButton)
+createClickAnimation(startStopButton)
+createClickAnimation(closeButton)
+
+-- Simple hover effects
+local function setupHover(button)
+    button.MouseEnter:Connect(function()
+        if isClosing then return end
+        local tween = TweenService:Create(button, TweenInfo.new(0.2), {
+            BackgroundTransparency = 0.1
+        })
+        tween:Play()
+    end)
+    
+    button.MouseLeave:Connect(function()
+        if isClosing then return end
+        local transparency = 0.3
+        if button == startStopButton and isFlying then
+            transparency = 0.2
+        elseif button == closeButton then
+            transparency = 0.3
+        end
+        local tween = TweenService:Create(button, TweenInfo.new(0.2), {
+            BackgroundTransparency = transparency
+        })
+        tween:Play()
+    end)
+end
+
+-- Special hover for close button
+closeButton.MouseEnter:Connect(function()
+    if isClosing then return end
+    local tween = TweenService:Create(closeButton, TweenInfo.new(0.2), {
+        BackgroundTransparency = 0.1,
+        BackgroundColor3 = Color3.fromRGB(180, 40, 40),
+        TextSize = 26  -- Slightly bigger X on hover
+    })
+    tween:Play()
+end)
+
+closeButton.MouseLeave:Connect(function()
+    if isClosing then return end
+    local tween = TweenService:Create(closeButton, TweenInfo.new(0.2), {
+        BackgroundTransparency = 0.3,
+        BackgroundColor3 = Color3.fromRGB(150, 30, 30),
+        TextSize = 24  -- Back to normal size
+    })
+    tween:Play()
+end)
+
+-- Toggle button hover
+toggleButton.MouseEnter:Connect(function()
+    if isClosing then return end
+    local tween = TweenService:Create(toggleButton, TweenInfo.new(0.2), {
+        BackgroundTransparency = 0.1
+    })
+    tween:Play()
+end)
+
+toggleButton.MouseLeave:Connect(function()
+    if isClosing then return end
+    local tween = TweenService:Create(toggleButton, TweenInfo.new(0.2), {
+        BackgroundTransparency = 0.2
+    })
+    tween:Play()
+end)
+
+-- Apply hover effects
+setupHover(increaseButton)
+setupHover(decreaseButton)
+setupHover(startStopButton)
+
+-- Update initial display
+updateSpeedDisplay()
+
+-- Handle player respawn
+player.CharacterAdded:Connect(function(character)
+    if isFlying then
+        stopFlying()
+    end
+end)
