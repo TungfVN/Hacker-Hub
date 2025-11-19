@@ -1,4 +1,4 @@
--- Fly GUI with Larger Buttons - WORKING CLOSE FUNCTION
+-- Fly GUI with Larger Buttons - FIXED NO TELEPORT
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -174,7 +174,8 @@ local isColumnOpen = false
 local isAnimating = false
 local isClosing = false
 local moveConnection
-local originalSeatCFrame
+local currentSeat = nil
+local seatAnchoredState = false
 
 -- Update speed display
 local function updateSpeedDisplay()
@@ -199,6 +200,7 @@ local function getSeat()
     if not humanoid then return nil end
     
     if humanoid.Sit then
+        -- Check if sitting in VehicleSeat
         for _, part in pairs(character:GetChildren()) do
             if part:IsA("BasePart") then
                 local seat = part:FindFirstAncestorOfClass("VehicleSeat")
@@ -208,21 +210,10 @@ local function getSeat()
             end
         end
         
+        -- Check if sitting in Seat
         for _, seat in pairs(workspace:GetDescendants()) do
             if seat:IsA("Seat") and seat.Occupant == humanoid then
                 return seat
-            end
-        end
-        
-        local runtimeItems = workspace:FindFirstChild("RuntimeItems")
-        if runtimeItems then
-            for _, chair in pairs(runtimeItems:GetChildren()) do
-                if chair:IsA("Model") and (chair.Name == "Chair" or chair.Name:find("Chair")) then
-                    local seat = chair:FindFirstChildOfClass("Seat")
-                    if seat and seat.Occupant == humanoid then
-                        return seat
-                    end
-                end
             end
         end
     end
@@ -230,7 +221,7 @@ local function getSeat()
     return nil
 end
 
--- Get the actual part to apply forces to (seat or character root part)
+-- Get the actual part to apply forces to
 local function getFlyTarget()
     local seat = getSeat()
     if seat then
@@ -242,7 +233,10 @@ local function getFlyTarget()
     else
         local character = getCharacter()
         if character then
-            return character:FindFirstChild("HumanoidRootPart")
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            if humanoidRootPart then
+                return humanoidRootPart
+            end
         end
     end
     return nil
@@ -408,7 +402,7 @@ local function closeUI()
     end)
 end
 
--- FLY FUNCTION
+-- FLY FUNCTION - COMPLETELY FIXED NO TELEPORT
 local function startFlying()
     if isFlying or isClosing then return end
     
@@ -425,12 +419,27 @@ local function startFlying()
     startStopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     startStopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     
-    -- Store original seat position if sitting
-    local seat = getSeat()
-    if seat then
-        originalSeatCFrame = seat.CFrame
+    -- Store current seat and its properties
+    currentSeat = getSeat()
+    if currentSeat then
+        -- Store original anchored state
+        if currentSeat:IsA("BasePart") then
+            seatAnchoredState = currentSeat.Anchored
+            currentSeat.Anchored = false
+        elseif currentSeat:IsA("Model") and currentSeat.PrimaryPart then
+            seatAnchoredState = currentSeat.PrimaryPart.Anchored
+            currentSeat.PrimaryPart.Anchored = false
+        end
+        
+        -- Disable vehicle seat movement
+        if currentSeat:IsA("VehicleSeat") then
+            currentSeat.MaxSpeed = 0
+            currentSeat.SteerFloat = 0
+            currentSeat.ThrottleFloat = 0
+        end
     else
-        originalSeatCFrame = nil
+        -- If not sitting, enable platform stand
+        humanoid.PlatformStand = true
     end
     
     -- Clean up any existing instances
@@ -456,26 +465,9 @@ local function startFlying()
     bodyGyro.D = 1000
     bodyGyro.Parent = targetPart
     
-    -- Disable seat auto-rotation and store original properties
-    if seat then
-        if seat:IsA("VehicleSeat") then
-            seat.MaxSpeed = 0
-        end
-        
-        -- Make seat non-anchored so it can move freely
-        if seat:IsA("BasePart") then
-            seat.Anchored = false
-        elseif seat:IsA("Model") and seat.PrimaryPart then
-            seat.PrimaryPart.Anchored = false
-        end
-    else
-        humanoid.PlatformStand = true
-    end
-    
     -- Make sure the target part can move
     if targetPart:IsA("BasePart") then
         targetPart.CanCollide = false
-        targetPart.Massless = true
     end
     
     -- Movement connection
@@ -515,24 +507,45 @@ local function startFlying()
             return
         end
         
-        -- Check if we just jumped out of seat
-        local currentSeat = getSeat()
-        if not currentSeat and seat then
-            -- We just jumped out of seat, switch to character control
-            seat = nil
-            originalSeatCFrame = nil
-            
-            -- Move controls to character
-            if bodyVelocity.Parent ~= currentTarget then
-                bodyVelocity.Parent = currentTarget
+        -- Check if seat status changed
+        local newSeat = getSeat()
+        if newSeat ~= currentSeat then
+            -- Seat status changed (jumped out or sat down)
+            if currentSeat and not newSeat then
+                -- Jumped out of seat - switch to character control
+                currentSeat = nil
+                
+                -- Move controls to character
+                if bodyVelocity.Parent ~= currentTarget then
+                    bodyVelocity.Parent = currentTarget
+                end
+                if bodyGyro.Parent ~= currentTarget then
+                    bodyGyro.Parent = currentTarget
+                end
+                
+                -- Enable platform stand for character
+                currentHumanoid.PlatformStand = true
+            elseif newSeat and not currentSeat then
+                -- Sat down in seat - switch to seat control
+                currentSeat = newSeat
+                
+                -- Move controls to seat
+                local seatTarget = getFlyTarget()
+                if seatTarget then
+                    if bodyVelocity.Parent ~= seatTarget then
+                        bodyVelocity.Parent = seatTarget
+                    end
+                    if bodyGyro.Parent ~= seatTarget then
+                        bodyGyro.Parent = seatTarget
+                    end
+                end
+                
+                -- Disable platform stand when sitting
+                currentHumanoid.PlatformStand = false
             end
-            if bodyGyro.Parent ~= currentTarget then
-                bodyGyro.Parent = currentTarget
-            end
-            
-            currentHumanoid.PlatformStand = true
         end
         
+        -- Ensure controls are on correct target
         if bodyVelocity.Parent ~= currentTarget then
             bodyVelocity.Parent = currentTarget
         end
@@ -540,6 +553,7 @@ local function startFlying()
             bodyGyro.Parent = currentTarget
         end
         
+        -- Update platform stand based on sitting state
         local isSitting = getSeat() ~= nil
         if isSitting then
             currentHumanoid.PlatformStand = false
@@ -574,6 +588,7 @@ local function startFlying()
                 direction = direction + Vector3.new(0, -1, 0)
             end
             
+            -- Only apply rotation if we're moving or not sitting
             if not isSitting or direction.Magnitude > 0.1 then
                 if direction.Magnitude > 0.1 then
                     bodyGyro.CFrame = CFrame.new(currentTarget.Position, currentTarget.Position + direction)
@@ -591,7 +606,7 @@ local function startFlying()
     end)
 end
 
--- STOP FLYING FUNCTION
+-- STOP FLYING FUNCTION - COMPLETELY FIXED NO TELEPORT
 local function stopFlying()
     if not isFlying then return end
     
@@ -613,35 +628,45 @@ local function stopFlying()
         humanoid.PlatformStand = false
     end
     
-    -- Prevent seat teleportation
-    local seat = getSeat()
-    if seat then
-        if seat:IsA("VehicleSeat") then
-            seat.MaxSpeed = 100
+    -- Restore seat properties WITHOUT teleporting
+    if currentSeat then
+        -- Restore anchored state
+        if currentSeat:IsA("BasePart") then
+            currentSeat.Anchored = seatAnchoredState
+        elseif currentSeat:IsA("Model") and currentSeat.PrimaryPart then
+            currentSeat.PrimaryPart.Anchored = seatAnchoredState
         end
-    else
-        originalSeatCFrame = nil
+        
+        -- Restore vehicle seat properties
+        if currentSeat:IsA("VehicleSeat") then
+            currentSeat.MaxSpeed = 100
+            currentSeat.SteerFloat = 0
+            currentSeat.ThrottleFloat = 0
+        end
     end
     
     -- Apply momentum for natural falling
     local targetPart = getFlyTarget()
     if targetPart and targetPart:IsA("BasePart") then
+        -- Restore collision
+        targetPart.CanCollide = true
+        
         if bodyVelocity then
             local currentVelocity = bodyVelocity.Velocity
             
             -- Apply momentum for smooth transition
             local momentumVelocity = Instance.new("BodyVelocity")
             momentumVelocity.Velocity = Vector3.new(
-                currentVelocity.X * 0.5,
-                currentVelocity.Y * 0.3,
-                currentVelocity.Z * 0.5
+                currentVelocity.X * 0.3,  -- Reduce horizontal momentum
+                currentVelocity.Y * 0.2,  -- Reduce vertical momentum
+                currentVelocity.Z * 0.3   -- Reduce horizontal momentum
             )
-            momentumVelocity.MaxForce = Vector3.new(8000, 8000, 8000)
+            momentumVelocity.MaxForce = Vector3.new(5000, 5000, 5000)
             momentumVelocity.Parent = targetPart
             
             -- Gradually reduce momentum
-            local momentumTween = TweenService:Create(momentumVelocity, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                Velocity = Vector3.new(0, momentumVelocity.Velocity.Y * 0.2, 0)
+            local momentumTween = TweenService:Create(momentumVelocity, TweenInfo.new(1.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                Velocity = Vector3.new(0, 0, 0)
             })
             momentumTween:Play()
             
@@ -649,14 +674,6 @@ local function stopFlying()
                 momentumVelocity:Destroy()
             end)
         end
-        
-        -- Restore properties with delay
-        delay(1, function()
-            if targetPart and targetPart.Parent then
-                targetPart.CanCollide = true
-                targetPart.Massless = false
-            end
-        end)
     end
     
     -- Clean up flying controls
@@ -670,8 +687,9 @@ local function stopFlying()
         bodyGyro = nil
     end
     
-    -- Clear stored seat data
-    originalSeatCFrame = nil
+    -- Clear seat data
+    currentSeat = nil
+    seatAnchoredState = false
 end
 
 -- Connect button events
