@@ -1,4 +1,4 @@
--- Fly GUI with Larger Buttons - WITH PROPER X ANIMATION
+-- Fly GUI with Larger Buttons - WORKING CLOSE FUNCTION
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -152,8 +152,8 @@ closeButton.BackgroundColor3 = Color3.fromRGB(150, 30, 30)
 closeButton.BackgroundTransparency = 0.3
 closeButton.Text = "X"
 closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeButton.TextSize = 24  -- Increased text size for better visibility
-closeButton.Font = Enum.Font.GothamBlack  -- Changed to bolder font
+closeButton.TextSize = 24
+closeButton.Font = Enum.Font.GothamBlack
 closeButton.Parent = columnFrame
 
 local closeCorner = Instance.new("UICorner")
@@ -327,81 +327,85 @@ local function toggleColumn()
     end
 end
 
--- SMOOTH CLOSE UI ANIMATION FUNCTION (IMPROVED)
-local function closeUIAnimation()
+-- SIMPLE AND RELIABLE CLOSE FUNCTION
+local function closeUI()
     if isClosing then return end
-    
     isClosing = true
     
-    -- Disable all buttons during animation
+    -- Stop flying first
+    if isFlying then
+        stopFlying()
+    end
+    
+    -- Disable all buttons
     toggleButton.Active = false
     increaseButton.Active = false
     decreaseButton.Active = false
     startStopButton.Active = false
     closeButton.Active = false
     
-    -- First close the column if it's open with smooth animation
-    if isColumnOpen then
-        local closeColumnTween = TweenService:Create(columnFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 100, 0, 0),
-            BackgroundTransparency = 0.8
+    -- Simple fade out animation for toggle button
+    local toggleTween = TweenService:Create(toggleButton, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        BackgroundTransparency = 1,
+        ImageTransparency = 1
+    })
+    
+    -- Simple fade out animation for column frame
+    local columnTween = TweenService:Create(columnFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        BackgroundTransparency = 1
+    })
+    
+    -- Fade out all strokes
+    local toggleStrokeTween = TweenService:Create(toggleStroke, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Transparency = 1
+    })
+    
+    local columnStrokeTween = TweenService:Create(columnStroke, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Transparency = 1
+    })
+    
+    -- Fade out all buttons in column
+    local buttons = {increaseButton, decreaseButton, startStopButton, closeButton, speedDisplay}
+    local buttonTweens = {}
+    
+    for _, button in pairs(buttons) do
+        local tween = TweenService:Create(button, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            BackgroundTransparency = 1,
+            TextTransparency = 1
         })
-        
-        local toggleRotateTween = TweenService:Create(toggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-            Rotation = 0
-        })
-        
-        closeColumnTween:Play()
-        toggleRotateTween:Play()
-        
-        -- Wait for column to close completely
-        closeColumnTween.Completed:Wait()
+        table.insert(buttonTweens, tween)
     end
     
-    -- Simultaneous fade out and scale down animation for both buttons
-    local toggleFadeTween = TweenService:Create(toggleButton, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        BackgroundTransparency = 1,
-        ImageTransparency = 1,
-        Size = UDim2.new(0, 0, 0, 0),
-        Position = UDim2.new(0, 45, 0, 45) -- Center of original position
-    })
+    -- Fade out all strokes in buttons
+    local strokes = {incStroke, decStroke, startStopStroke, closeStroke, speedStroke}
+    local strokeTweens = {}
     
-    local closeFadeTween = TweenService:Create(closeButton, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        BackgroundTransparency = 1,
-        TextTransparency = 1,
-        TextColor3 = Color3.fromRGB(255, 100, 100) -- Red fade effect
-    })
-    
-    -- Create a special X animation on the close button before fading
-    local closeScaleTween = TweenService:Create(closeButton, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        TextSize = 32, -- Make X bigger
-        Size = UDim2.new(1, -8, 0, 60) -- Make close button bigger temporarily
-    })
-    
-    local closeScaleBackTween = TweenService:Create(closeButton, TweenInfo.new(0.3, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {
-        TextSize = 24,
-        Size = UDim2.new(1, -16, 0, 50)
-    })
-    
-    -- Animation sequence
-    closeScaleTween:Play()
-    closeScaleTween.Completed:Wait()
-    closeScaleBackTween:Play()
-    
-    -- Start fade animations after the X animation
-    toggleFadeTween:Play()
-    closeFadeTween:Play()
-    
-    -- Wait for fade animation to complete
-    toggleFadeTween.Completed:Wait()
-    
-    -- Stop flying if active
-    if isFlying then
-        stopFlying()
+    for _, stroke in pairs(strokes) do
+        local tween = TweenService:Create(stroke, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Transparency = 1
+        })
+        table.insert(strokeTweens, tween)
     end
     
-    -- Destroy UI after animation
-    flyGui:Destroy()
+    -- Start all animations
+    toggleTween:Play()
+    columnTween:Play()
+    toggleStrokeTween:Play()
+    columnStrokeTween:Play()
+    
+    for _, tween in pairs(buttonTweens) do
+        tween:Play()
+    end
+    
+    for _, tween in pairs(strokeTweens) do
+        tween:Play()
+    end
+    
+    -- Wait for animation to complete then destroy
+    toggleTween.Completed:Connect(function()
+        wait(0.1) -- Small delay to ensure everything faded
+        flyGui:Destroy()
+    end)
 end
 
 -- FLY FUNCTION
@@ -479,6 +483,7 @@ local function startFlying()
         if not isFlying or not bodyVelocity or not bodyGyro or isClosing then
             if moveConnection then
                 moveConnection:Disconnect()
+                moveConnection = nil
             end
             return
         end
@@ -487,6 +492,7 @@ local function startFlying()
         if not currentCharacter then
             if moveConnection then
                 moveConnection:Disconnect()
+                moveConnection = nil
             end
             return
         end
@@ -495,6 +501,7 @@ local function startFlying()
         if not currentHumanoid then
             if moveConnection then
                 moveConnection:Disconnect()
+                moveConnection = nil
             end
             return
         end
@@ -503,6 +510,7 @@ local function startFlying()
         if not currentTarget then
             if moveConnection then
                 moveConnection:Disconnect()
+                moveConnection = nil
             end
             return
         end
@@ -688,10 +696,9 @@ startStopButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Close button event with improved animation
+-- Close button event - SIMPLE AND WORKING
 closeButton.MouseButton1Click:Connect(function()
-    if isClosing then return end
-    closeUIAnimation()
+    closeUI()
 end)
 
 -- Toggle button click
@@ -737,7 +744,7 @@ closeButton.MouseEnter:Connect(function()
     local tween = TweenService:Create(closeButton, TweenInfo.new(0.2), {
         BackgroundTransparency = 0.1,
         BackgroundColor3 = Color3.fromRGB(180, 40, 40),
-        TextSize = 26  -- Slightly bigger X on hover
+        TextSize = 26
     })
     tween:Play()
 end)
@@ -747,7 +754,7 @@ closeButton.MouseLeave:Connect(function()
     local tween = TweenService:Create(closeButton, TweenInfo.new(0.2), {
         BackgroundTransparency = 0.3,
         BackgroundColor3 = Color3.fromRGB(150, 30, 30),
-        TextSize = 24  -- Back to normal size
+        TextSize = 24
     })
     tween:Play()
 end)
