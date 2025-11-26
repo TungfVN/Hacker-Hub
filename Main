@@ -5391,17 +5391,17 @@ BackgroundTransparency=1,
 Parent=ai,
 })
 
-local aq=ab.NewRoundFrame(an,"Squircle",{
+local aq=ab.NewRoundFrame(an,"Round",{
 ImageTransparency=.85,
 ThemeTag={
 ImageColor3="Text"
 },
 Parent=ap,
-Size = UDim2.new(0,41.6,0,26)
+Size = UDim2.new(0, ak and 52 or 36, 0, 22),
 AnchorPoint=Vector2.new(1,0.5),
 Position=UDim2.new(0,0,0.5,0),
 },{
-ab.NewRoundFrame(an,"Squircle",{
+ab.NewRoundFrame(an,"Round",{
 Size=UDim2.new(1,0,1,0),
 Name="Layer",
 ThemeTag={
@@ -5409,7 +5409,7 @@ ImageColor3="Toggle",
 },
 ImageTransparency=1,
 }),
-ab.NewRoundFrame(an,"SquircleOutline",{
+ab.NewRoundFrame(an,"Round",{
 Size=UDim2.new(1,0,1,0),
 Name="Stroke",
 ImageColor3=Color3.new(1,1,1),
@@ -5425,14 +5425,14 @@ NumberSequenceKeypoint.new(1,1),
 }),
 
 
-ab.NewRoundFrame(an,"Squircle",{
-Size=UDim2.new(0,ak and 30 or 20,0,20),
+ab.NewRoundFrame(an,"Round",{
+Size = UDim2.new(0, ak and 26 or 18, 0, 18)
 Position=UDim2.new(0,2,0.5,0),
 AnchorPoint=Vector2.new(0,0.5),
 ImageTransparency=1,
 Name="Frame",
 },{
-ab.NewRoundFrame(an,"Squircle",{
+ab.NewRoundFrame(an,"Round",{
 Size=UDim2.new(1,0,1,0),
 ImageTransparency=0,
 ThemeTag={
@@ -5442,7 +5442,7 @@ AnchorPoint=Vector2.new(0.5,0.5),
 Position=UDim2.new(0.5,0,0.5,0),
 Name="Bar"
 },{
-ab.NewRoundFrame(an,"SquircleOutline2",{
+ab.NewRoundFrame(an,"Round",{
 Size=UDim2.new(1,0,1,0),
 ImageColor3=Color3.new(1,1,1),
 Name="Highlight",
@@ -5647,7 +5647,7 @@ am.AnchorPoint=Vector2.new(0.5,0.5)
 am.Position=UDim2.new(0.5,0,0.5,0)
 
 
-local an=ab.NewRoundFrame(al,"Squircle",{
+local an=ab.NewRoundFrame(an,"Squircle",{
 ImageTransparency=.85,
 ThemeTag={
 ImageColor3="Text"
@@ -5663,7 +5663,7 @@ ImageColor3="Checkbox",
 },
 ImageTransparency=1,
 }),
-ab.NewRoundFrame(al,"SquircleOutline",{
+ab.NewRoundFrame(al,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 Name="Stroke",
 ImageColor3=Color3.new(1,1,1),
