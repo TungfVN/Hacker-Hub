@@ -1,3 +1,4 @@
+-- AI nha mấy ní lỗi thì phải chịu đấy 
 -- Fly GUI with Larger Buttons - FIXED NO TELEPORT
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
