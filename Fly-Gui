@@ -1,4 +1,4 @@
--- AI nha mấy ní lỗi thì phải chịu đấy 
+-- AI nha mấy ní lỗi thì phải chịu đấy mà vào đến đây check suộc tôi thì chịu mấy bố rồi đúng ae skibidi 
 -- Fly GUI with Larger Buttons - FIXED NO TELEPORT
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
